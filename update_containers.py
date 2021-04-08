@@ -20,15 +20,24 @@ s = requests.Session()
 
 def update_images(headers, cookies, syno_server_url, containers):
     """Update Docker Images"""
-    def update_image(container_image):
+    def update_image(container_image, container_name):
         """Update Docker Image"""
-        payload = {
-            "api": "SYNO.Docker.Image",
-            "method": "pull_start",
-            "version": "1",
-            "tag": "latest",
-            "repository": str(container_image)
-        }
+        if str(container_name) in [""]:
+            payload = {
+                "api": "SYNO.Docker.Image",
+                "method": "pull_start",
+                "version": "1",
+                "tag": "latest",
+                "repository": str(container_image)
+            }
+        else:
+            payload = {
+                "api": "SYNO.Docker.Image",
+                "method": "pull_start",
+                "version": "1",
+                "tag": "latest",
+                "repository": str(container_image)
+            }
 
         result = s.post("{}/webapi/entry.cgi".format(syno_server_url), cookies=cookies, data=payload,
                         headers=headers, verify=False)
@@ -62,7 +71,7 @@ def update_images(headers, cookies, syno_server_url, containers):
 
     updated_images = []
     for container in containers:
-        container_downloaded = update_image(container.get("image"))
+        container_downloaded = update_image(container.get("image"), container.get("name"))
         if container_downloaded:
             updated_images.append({
                 "name": container.get("name"),
