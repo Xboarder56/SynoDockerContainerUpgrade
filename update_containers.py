@@ -204,7 +204,7 @@ def main(dsm_host, dsm_port, user_name, password, https=None):
                 if stop_container(headers, cookies, syno_server_url, container):
                     logging.info("Stopped Container: %s", container.get("name"))
                     time.sleep(2)
-                    if stop_container(headers, cookies, syno_server_url, container):
+                    if clear_container(headers, cookies, syno_server_url, container):
                         logging.info("Cleared Container: %s", container.get("name"))
                         time.sleep(2)
                         if start_container(headers, cookies, syno_server_url, container):
